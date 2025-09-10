@@ -80,7 +80,7 @@ const CasinoCardsSection = () => {
     
   "
 >
-  <h3 className="font-bold text-xl text-emerald-400 tracking-wide mb-3 ">
+  <h3 className="font-bold text-xl text-green-400 tracking-wide mb-3 ">
     {card.title}
   </h3>
   <p className="text-sm text-gray-300 leading-snug">
