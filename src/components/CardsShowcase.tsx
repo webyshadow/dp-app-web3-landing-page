@@ -6,7 +6,7 @@ const CasinoCardsSection = () => {
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start 90%", "end start"], // starts earlier
+    offset: ["start 90%", "end start"],
   });
 
   const cards = [
@@ -28,31 +28,52 @@ const CasinoCardsSection = () => {
     },
   ];
 
-  // 👇 Yahan pe saare transforms ek array mein bana lo
-  const transforms = cards.map((_, i) => {
-    const progressStart = i * 0.2;
-    const progressEnd = progressStart + 0.3;
-    const yStart = 300 + i * 100;
+  // ✅ Top-level pe hi saare transforms define karo
+  const yTransforms = [
+    useTransform(scrollYProgress, [0, 0.3], [300, 80]),
+    useTransform(scrollYProgress, [0.2, 0.5], [400, 80]),
+    useTransform(scrollYProgress, [0.4, 0.7], [500, 80]),
+    useTransform(scrollYProgress, [0.6, 0.9], [600, 80]),
+  ];
 
-    return {
-      y: useTransform(scrollYProgress, [progressStart, progressEnd], [yStart, 80]),
-      x: useTransform(scrollYProgress, [progressStart, progressEnd], [-200 + i * 150, i * 320 - 500]),
-      rotate: useTransform(scrollYProgress, [progressStart, progressEnd], [-45 + i * 10, 0]),
-      opacity: useTransform(scrollYProgress, [progressStart, progressEnd], [0, 1]),
-    };
-  });
+  const xTransforms = [
+    useTransform(scrollYProgress, [0, 0.3], [-200, -500]),
+    useTransform(scrollYProgress, [0.2, 0.5], [-50, -180]),
+    useTransform(scrollYProgress, [0.4, 0.7], [100, 140]),
+    useTransform(scrollYProgress, [0.6, 0.9], [250, 400]),
+  ];
+
+  const rotateTransforms = [
+    useTransform(scrollYProgress, [0, 0.3], [-45, 0]),
+    useTransform(scrollYProgress, [0.2, 0.5], [-35, 0]),
+    useTransform(scrollYProgress, [0.4, 0.7], [-25, 0]),
+    useTransform(scrollYProgress, [0.6, 0.9], [-15, 0]),
+  ];
+
+  const opacityTransforms = [
+    useTransform(scrollYProgress, [0, 0.3], [0, 1]),
+    useTransform(scrollYProgress, [0.2, 0.5], [0, 1]),
+    useTransform(scrollYProgress, [0.4, 0.7], [0, 1]),
+    useTransform(scrollYProgress, [0.6, 0.9], [0, 1]),
+  ];
 
   return (
     <section
       ref={sectionRef}
-      className="w-full h-[200vh] relative bg-black bg-dot-grid"
+      className="w-full relative bg-black bg-dot-grid"
     >
-      <div className="sticky top-0 h-screen flex items-center justify-center">
+      {/* ✅ Large screens = fancy animation */}
+      <div className="hidden md:flex sticky top-0 h-screen items-center justify-center">
         <div className="relative w-full h-[400px] flex justify-center items-start mt-[-100px]">
           {cards.map((card, i) => (
             <motion.div
               key={i}
-              style={transforms[i]} // ✅ Ab yahan se transforms use kar rahe hain
+              style={{
+                y: yTransforms[i],
+                x: xTransforms[i],
+                rotate: rotateTransforms[i],
+                opacity: opacityTransforms[i],
+              }}
               className="
                 absolute w-[220px] h-[300px] 
                 bg-gradient-to-b from-black/80 to-neutral-900/90
@@ -73,6 +94,29 @@ const CasinoCardsSection = () => {
             </motion.div>
           ))}
         </div>
+      </div>
+
+      {/* ✅ Small screens = simple vertical list */}
+      <div className="md:hidden flex flex-col gap-6 py-12 px-6">
+        {cards.map((card, i) => (
+          <div
+            key={i}
+            className="
+              w-full h-auto 
+              bg-gradient-to-b from-black/80 to-neutral-900/90
+              border border-emerald-500/30 
+              shadow-[0_0_15px_rgba(16,185,129,0.3)] 
+              rounded-2xl flex flex-col justify-center items-center 
+              p-6 text-center 
+              backdrop-blur-xl
+            "
+          >
+            <h3 className="font-bold text-lg text-green-400 tracking-wide mb-2">
+              {card.title}
+            </h3>
+            <p className="text-sm text-gray-300 leading-snug">{card.para}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

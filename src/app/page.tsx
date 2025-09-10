@@ -11,6 +11,7 @@ import ArchitectureSection from "@/components/ArchitectureSection";
 import ComparisonSection from "@/components/ComparisonSection";
 import LastSection from "@/components/LastSection";
 import Footer from "@/components/Footer";
+import CardsShowcase from "@/components/CardsShowcase";
 
 const Home: NextPage = () => {
   return (
@@ -20,7 +21,7 @@ const Home: NextPage = () => {
         <Hero />
         <Vision />
         <Problems />
-        <CasinoCardsSection />
+        <CardsShowcase />
         <TokenEcosystem />
         <RevenueModel />
         <SecuritySection />
